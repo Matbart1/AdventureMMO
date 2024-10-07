@@ -14,5 +14,12 @@ include 'shared'
 include 'api'
 include 'services:webservice'
 */
-
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Sponge'
+            url = 'https://repo.spongepowered.org/maven'
+        }
+    }
+}
 rootProject.name = 'AdventureMMO'

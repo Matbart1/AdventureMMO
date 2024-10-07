@@ -10,6 +10,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.event.entity.SpawnEntityEvent;
 import org.spongepowered.api.event.entity.projectile.LaunchProjectileEvent;
 import org.spongepowered.api.event.filter.IsCancelled;
 import org.spongepowered.api.event.filter.cause.First;
@@ -49,19 +50,19 @@ public class ArcheryListener extends MMOObject {
 
 	@Listener(order = Order.LATE)
 	@IsCancelled(value = Tristate.FALSE)
-	public void onArrowFire(final LaunchProjectileEvent e) {
-		if (e.getTargetEntity() instanceof Arrow && e.getTargetEntity().getShooter() instanceof Player) {
-			Player p = (Player) e.getTargetEntity().getShooter();
+	public void onArrowFire(final SpawnEntityEvent e) {
+		if (e.getEntities() instanceof Arrow && ((Arrow) e.getEntities()).getShooter() instanceof Player) {
+			Player p = (Player) ((Arrow) e.getEntities()).getShooter();
 			PlayerData data = super.getMMO().getPlayerDatabase().get(p.getUniqueId());
 
 			if (Abilities.ARROW_RAIN.getChance(data.getLevel(SkillTypes.ARCHERY))) {
-				e.getTargetEntity().offer(Keys.FIRE_TICKS, 1000);
-				EntityArchetype a = e.getTargetEntity().createArchetype();
-				Vector3d v = e.getTargetEntity().getVelocity();
+				((Arrow) e.getEntities()).offer(Keys.FIRE_TICKS, 1000);
+				EntityArchetype a = ((Arrow) e.getEntities()).createArchetype();
+				Vector3d v = ((Arrow) e.getEntities()).getVelocity();
 				for (int i = 0; i < 9; i++) {
 					a.offer(Keys.VELOCITY, v.add(0.05 - (Math.random() * 0.1), 0.05 - (Math.random() * 0.1),
 							0.05 - (Math.random() * 0.1)));
-					a.apply(e.getTargetEntity().getLocation());
+					a.apply(((Arrow) e.getEntities()).getLocation());
 				}
 			}
 		}

@@ -40,12 +40,12 @@ public class MetricsLite {
 	private boolean enabled;
 	private boolean logFailedRequests = false;
 
-	private Logger logger;
+	private final Logger logger;
 	private final PluginContainer plugin;
 	private String serverUUID;
 
 	private static final List<Object> knownMetricsInstances = new ArrayList<>();
-	private Path configDir;
+	private final Path configDir;
 
 	@Inject
 	private MetricsLite(PluginContainer plugin, Logger logger, @ConfigDir(sharedRoot = true) Path configDir) {

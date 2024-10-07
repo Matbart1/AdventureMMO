@@ -1,13 +1,23 @@
+
 plugins {
-    id "org.spongepowered.gradle.plugin" version "2.2.0"
+    //id 'org.spongepowered.plugin' version '0.8.1'
+    id 'java'
 }
+
+compileJava.options.encoding = 'UTF-8'
+
 
 group = 'me.mrdaniel.adventuremmo'
 version = '2.1.2'
 description = 'A light-weight plugin that adds skills with all sorts of fun game mechanics to your server.'
 
-compileJava.options.encoding = 'UTF-8'
+repositories {
+    maven {
+        name = 'Sponge'
+        url = 'https://repo.spongepowered.org/maven'
+    }
+}
 
 dependencies {
-    implementation 'org.spongepowered:spongeapi:7.4.0'
+    compileOnly('org.spongepowered:spongeapi:7.4.0')
 }

@@ -6,8 +6,8 @@ import java.nio.file.Path;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
@@ -75,6 +75,7 @@ import me.mrdaniel.adventuremmo.utils.ItemUtils;
 
 @Plugin(id = "adventuremmo", name = "AdventureMMO", version = "2.1.2", description = "A light-weight plugin that adds skills with all sorts of fun game mechanics to your server.", authors = {
 		"Daniel12321", "rojo8399" })
+
 public class AdventureMMO {
 
 	private final Game game;
@@ -98,6 +99,18 @@ public class AdventureMMO {
 		this.configdir = path;
 		this.container = container;
 
+
+		this.logger.info("########################################################");
+		this.logger.info("ADVENTURE MMO PLUGIN BOOT");
+		this.logger.info("########################################################");
+		this.logger.info("#                                                      #");
+		this.logger.info("#                                                      #");
+		this.logger.info("#                                                      #");
+		this.logger.info("#                                                      #");
+		this.logger.info("#                                                      #");
+		this.logger.info("#                                                      #");
+		this.logger.info("#                                                      #");
+
 		if (!Files.exists(path)) {
 			try {
 				Files.createDirectory(path);
@@ -106,6 +119,7 @@ public class AdventureMMO {
 			}
 		}
 	}
+
 	@Listener
 	public void onPreInit(@Nullable final GamePreInitializationEvent e) {
 		this.logger.info("Registering custom data...");
@@ -131,11 +145,22 @@ public class AdventureMMO {
 		this.logger.info("Loading plugin...");
 
 		// Register Data
-		DataRegistration.builder().dataClass(MMOData.class).immutableClass(ImmutableMMOData.class)
-				.builder(new MMODataBuilder()).manipulatorId("data").dataName("Data").buildAndRegister(container);
-		DataRegistration.builder().dataClass(SuperToolData.class).immutableClass(ImmutableSuperToolData.class)
-				.builder(new SuperToolDataBuilder()).manipulatorId("super-tool-data").dataName("Super Tool Data")
-				.buildAndRegister(container);
+		DataRegistration
+				.builder()
+				.dataClass(MMOData.class)
+				.immutableClass(ImmutableMMOData.class)
+				.builder(new MMODataBuilder())
+				.id("data")
+				.name("Data")
+				.build();
+
+		DataRegistration.builder()
+				.dataClass(SuperToolData.class)
+				.immutableClass(ImmutableSuperToolData.class)
+				.builder(new SuperToolDataBuilder())
+				.id("super-tool-data")
+				.name("Super Tool Data")
+				.build();
 
 		final long startuptime = System.currentTimeMillis();
 
@@ -143,10 +168,17 @@ public class AdventureMMO {
 		final Config config = new Config(this, this.configdir.resolve("config.conf"));
 
 		// Registering Config Settings
-		Abilities.VALUES.removeIf(ability -> !config.getNode("abilities", ability.getId(), "enabled").getBoolean(true));
-		Abilities.VALUES.forEach(ability -> ability.setValues(config.getNode("abilities", ability.getId())));
-		SkillTypes.VALUES.removeIf(skill -> !config.getNode("skills", skill.getId(), "enabled").getBoolean(true));
-		SkillTypes.VALUES.forEach(skill -> skill.getAbilities().removeIf(ability -> !ability.isEnabled()));
+		Abilities.VALUES.removeIf(ability -> !config
+				.getNode("abilities", ability.getId(), "enabled")
+				.getBoolean(true));
+		Abilities.VALUES.forEach(ability -> ability.
+				setValues(config.getNode("abilities", ability.getId())));
+		SkillTypes.VALUES.removeIf(skill -> !config
+				.getNode("skills", skill.getId(), "enabled")
+				.getBoolean(true));
+		SkillTypes.VALUES.forEach(skill -> skill
+				.getAbilities()
+				.removeIf(ability -> !ability.isEnabled()));
 
 		// Initializing Managers
 		this.playerdata = new HoconPlayerDatabase(this, this.configdir.resolve("playerdata"));

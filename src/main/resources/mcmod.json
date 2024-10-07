@@ -1,0 +1,17 @@
+[
+  {
+    "modid": "adventuremmo",
+    "name": "AdventureMMO",
+    "version": "2.0.7",
+    "description": "A light-weight plugin that adds skills with all sorts of fun game mechanics to your server.",
+    "authorList": [
+      "Daniel12321"
+    ],
+    "dependencies": [
+      "spongeapi@7.4.0-SNAPSHOT"
+    ],
+    "requiredMods": [
+      "spongeapi@7.4.0-SNAPSHOT"
+    ]
+  }
+]

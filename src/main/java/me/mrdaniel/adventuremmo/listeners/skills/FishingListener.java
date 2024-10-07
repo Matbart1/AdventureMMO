@@ -96,6 +96,6 @@ public class FishingListener extends ActiveAbilityListener {
 				return this.drops.get(l).getSecond().create(super.getMMO());
 			}
 		}
-		return ItemUtils.build(ItemTypes.DYE, (int) Math.random() * 11 + 10, 4);
+		return ItemUtils.build(ItemTypes.DYE, (int)(Math.random() * 11 + 10), 4);
 	}
 }
