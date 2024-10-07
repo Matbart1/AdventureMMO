@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
+import org.spongepowered.api.event.CauseStackManager;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.key.Keys;
@@ -40,8 +41,15 @@ public class ItemUtils {
 
 	@Nonnull
 	public static ItemStack build(@Nonnull final ItemType type, final int amount, final int unsafe) {
-		return ItemStack.builder().fromContainer(DataContainer.createNew().set(DataQuery.of("ItemType"), type)
-				.set(DataQuery.of("Count"), amount).set(DataQuery.of("UnsafeDamage"), unsafe)).build();
+		ItemStack item =  ItemStack.builder()
+				.itemType(type)
+				.quantity(amount)
+				.build(); // Unsafe damage handling is deprecated, avoid direct manipulation
+
+		// Now offer the unsafe damage (durability) value
+		item.offer(Keys.ITEM_DURABILITY, unsafe);
+
+		return item;
 	}
 
 	@Nonnull
@@ -107,9 +115,21 @@ public class ItemUtils {
 		ench.add(Enchantment.of(type, MathUtils.between(lvl, 1, max_lvl)));
 		item.offer(Keys.ITEM_ENCHANTMENTS, ench);
 
-		p.setItemInHand(HandTypes.MAIN_HAND, item);
+		p.getInventory().query(HandTypes.MAIN_HAND).set(item);
+		//p.setItemInHand(HandTypes.MAIN_HAND, item);
 	}
 
+	public static void restoreSuperTool(@Nonnull final Player p, @Nonnull final PluginContainer container) {
+		try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame()) {
+			frame.pushCause(container);
+			p.closeInventory();
+		}
+		p.getInventory().slots().forEach(slot ->
+				slot.peek().ifPresent(item ->
+						item.get(SuperToolData.class).ifPresent(data ->
+								slot.set(data.restore(item)))));
+	}
+	/* Replaced with a more updated supertool
 	public static void restoreSuperTool(@Nonnull final Player p, @Nonnull final PluginContainer container) {
 		p.closeInventory();
 		// API 6 p.closeInventory(ServerUtils.getCause(container,
@@ -117,6 +137,8 @@ public class ItemUtils {
 		p.getInventory().slots().forEach(slot -> slot.peek()
 				.ifPresent(item -> item.get(SuperToolData.class).ifPresent(data -> slot.set(data.restore(item)))));
 	}
+
+ */
 
 	@Nonnull
 	public static ItemStack enchant(@Nonnull final AdventureMMO mmo, @Nonnull final ItemStack item) {

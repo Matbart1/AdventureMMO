@@ -106,7 +106,6 @@ public class AdventureMMO {
 			}
 		}
 	}
-
 	@Listener
 	public void onPreInit(@Nullable final GamePreInitializationEvent e) {
 		this.logger.info("Registering custom data...");

@@ -33,8 +33,8 @@ public class AbilityEvent extends AbstractEvent implements Cancellable {
 		this.player = player;
 		this.tool = tool;
 		this.onblock = onblock;
-
-		this.cause = Cause.builder().append(mmo.getContainer()).build(EventContext.empty());
+		this.cause = Cause.of(EventContext.empty(), mmo.getContainer());
+		//this.cause = Cause.builder().append(mmo.getContainer()).build(EventContext.empty());
 		this.cancelled = false;
 
 		this.ability = null;

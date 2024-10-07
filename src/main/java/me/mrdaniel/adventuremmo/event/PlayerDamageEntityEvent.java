@@ -27,8 +27,8 @@ public class PlayerDamageEntityEvent extends AbstractEvent {
 		this.tool = tool;
 		this.damage = damage;
 		this.death = death;
-
-		this.cause = Cause.builder().append(mmo.getContainer()).build(EventContext.empty());
+		this.cause = Cause.of(EventContext.empty(), mmo.getContainer());
+		//this.cause = Cause.builder().append(mmo.getContainer()).build(EventContext.empty());
 	}
 
 	@Nonnull

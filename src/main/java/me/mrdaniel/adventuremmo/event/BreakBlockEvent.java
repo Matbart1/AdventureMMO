@@ -29,8 +29,8 @@ public class BreakBlockEvent extends AbstractEvent {
 		this.location = location;
 		this.block = block;
 		this.tool = tool;
-
-		this.cause = Cause.builder().append(mmo.getContainer()).build(EventContext.empty());
+		this.cause = Cause.of(EventContext.empty(), mmo.getContainer());
+		//this.cause = Cause.builder().append(mmo.getContainer()).build(EventContext.empty());
 	}
 
 	@Nonnull

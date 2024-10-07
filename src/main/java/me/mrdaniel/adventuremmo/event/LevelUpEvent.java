@@ -27,8 +27,8 @@ public class LevelUpEvent extends AbstractEvent implements Cancellable {
 		this.skill = skill;
 		this.old_level = old_level;
 		this.new_level = new_level;
-
-		this.cause = Cause.builder().append(mmo.getContainer()).build(EventContext.empty());
+		this.cause = Cause.of(EventContext.empty(), mmo.getContainer());
+		//this.cause = Cause.builder().append(mmo.getContainer()).build(EventContext.empty());
 		this.cancelled = false;
 	}
 
